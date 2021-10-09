@@ -1,60 +1,111 @@
 <template>
   <div id="app">
-    <img src="./assets/logo.png">
-    <h1>{{ msg }}</h1>
-    <h2>Essential Links</h2>
-    <ul>
-      <li><a href="https://vuejs.org" target="_blank">Core Docs</a></li>
-      <li><a href="https://forum.vuejs.org" target="_blank">Forum</a></li>
-      <li><a href="https://chat.vuejs.org" target="_blank">Community Chat</a></li>
-      <li><a href="https://twitter.com/vuejs" target="_blank">Twitter</a></li>
-    </ul>
-    <h2>Ecosystem</h2>
-    <ul>
-      <li><a href="http://router.vuejs.org/" target="_blank">vue-router</a></li>
-      <li><a href="http://vuex.vuejs.org/" target="_blank">vuex</a></li>
-      <li><a href="http://vue-loader.vuejs.org/" target="_blank">vue-loader</a></li>
-      <li><a href="https://github.com/vuejs/awesome-vue" target="_blank">awesome-vue</a></li>
-    </ul>
+      <top-header :name="currentUser.username" :avatar="currentUser.avatar"></top-header>
+      <div id="content">
+        <post :post="post"></post>
+        <hr>
+        <p>Mais publicações</p>
+        <div class="related-posts">
+            <div id="related" v-for="(rel, i) of relateds" :key="i">
+                <related-post :post="rel"></related-post>
+            </div>
+        </div>
+      </div>
+      <footer>
+        <img src="./assets/tagview.svg" alt="">
+      </footer>
   </div>
 </template>
 
 <script>
+import Header from "./components/header.vue";
+import Related from "./components/related-post.vue";
+import Post from "./components/post.vue";
+
 export default {
-  name: 'app',
-  data () {
-    return {
-      msg: 'Welcome to Your Vue.js App'
-    }
-  }
+    name: 'app',
+    components: {
+        "top-header": Header,
+        "related-post": Related,
+        "post": Post
+    },
+    data() {
+        return {
+            currentUser: {},
+            post: {},
+            relateds: [],
+        }
+    },
+    methods: {
+        getUser() {
+            this.$http.get('https://taggram.herokuapp.com/me')
+                .then(res => res.json())
+                .then(data => (this.currentUser = data, this.getPost()))
+                .catch(err => console.log(err));
+        },
+        getPost() {
+            this.$http.get('https://taggram.herokuapp.com/post', {
+                    params: {
+                        username: this.currentUser.username
+                    }
+                })
+                .then(res => res.json())
+                .then(data => (this.post = data, this.getRelateds()))
+                .catch(err => console.log(err));
+        },
+        getRelateds() {
+            this.$http.get(`https://taggram.herokuapp.com/posts/${this.post.uuid}/related`)
+                .then(res => res.json())
+                .then(data => this.relateds = data.filter(p => p.comment_count > 3))
+                .catch(err => console.log(err));
+        }
+    },
+    created() {
+        this.getUser();
+    },
 }
 </script>
 
-<style>
+<style scoped>
 #app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
+    background-color: #FAFAFA;
+    font-family: Arial, Helvetica, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+footer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 4em;
+}
+
+footer img {
+  width: 7em;
+}
+
+#content {
+  max-width: 950px;
+  margin: 0 auto;
+  padding: 15px;
+}
+
+.related-posts {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-gap: 35px;
+}
+
+p {
+    margin: 15px auto;
+    font-family: Arial;
+    font-style: normal;
+    font-weight: bold;
+    color: #8E8E8E;
+}
+
+hr {
   margin-top: 60px;
-}
-
-h1, h2 {
-  font-weight: normal;
-}
-
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-
-a {
-  color: #42b983;
 }
 </style>
