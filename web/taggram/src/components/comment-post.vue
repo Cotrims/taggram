@@ -42,6 +42,14 @@ export default {
             var seconds = Math.round(passedTime);
             var minutes = Math.round(seconds / 60);
             var hours = Math.round(minutes / 60);
+            var days =  Math.round(hours / 24);
+            var weeks =  Math.round(hours / 24);
+
+            if (weeks > 0)
+                return `${weeks}w`;
+
+            if (days > 0)
+                return `${days}d`;
 
             if (hours > 0)
                 return `${hours}h`;
@@ -49,7 +57,10 @@ export default {
             if (minutes > 0)
                 return `${minutes}min`;
 
-            return `${seconds}sec`;
+            if(!isNaN(seconds))
+                return `${seconds}sec`;
+
+            return since;
         },
         like(uuid) {
             this.$http.post(`https://taggram.herokuapp.com/comments/${uuid}/like`, {
@@ -60,7 +71,7 @@ export default {
                 .catch(err =>
                     this.erro = {
                         occured: true,
-                        message: "Erro ao curtir comentário!",
+                        message: "Erro ao curtir comentário, tente novamente!",
                         duration: 2
                     }
                 );
@@ -74,7 +85,7 @@ export default {
                 .catch(err =>
                     this.erro = {
                         occured: true,
-                        message: "Erro ao descurtir comentário!",
+                        message: "Erro ao descurtir comentário, tente novamente!",
                         duration: 2
                     });
         }
@@ -87,6 +98,7 @@ export default {
     padding: 18px 22px;
     display: flex;
     column-gap: 18px;
+    font-size: 14px;
 }
 
 .center {
@@ -96,7 +108,7 @@ export default {
 .bottom {
     display: flex;
     column-gap: 10px;
-    padding-top: 18px;
+    padding-top: 16px;
     font-size: 15px;
 }
 

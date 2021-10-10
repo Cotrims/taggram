@@ -1,17 +1,16 @@
-<template lang="">
-    <img :src="post.photo"> </img>
+<template>
+    <img :src="image">
 </template>
 
 <script>
 export default {
-    props: ["post"],
+    props: ["image"],
 }
 </script>
 
-<style lang="" scoped>
-    img {
-        object-fit: scale-down;
-        width: 100%;
-    }
-    
+<style scoped>
+img {
+    object-fit: scale-down;
+    width: 100%;
+}
 </style>

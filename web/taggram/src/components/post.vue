@@ -19,7 +19,7 @@
             <post-comment v-for="(comment, i) of post.comments" :info="comment" :current_user="post.user.username" :key="i" v-on:update="post.comments[i] = $event, $forceUpdate()"> </post-comment>
         </div>
         <div class="post_infos">
-            <div class="post_comment_count">{{post.comments.length}} comentários</div>
+            <div class="post_comment_count">{{post.comments.length == 1 ? `${post.comments.length} comentário` : `${post.comments.length} comentários`}} </div>
             <div class="post_date">{{post.created_at}}</div>
         </div>
     </div>
@@ -80,16 +80,17 @@ export default {
     font-family: arial;
 }
 
-.user_avatar {
+.avatar {
+    overflow: hidden;
     height: 35px;
     width: 35px;
-    background-color: #DBDBDB;
     border-radius: 50%;
-    overflow: hidden;
+    background-color: #DBDBDB;
 }
 
 .user_avatar img {
   width: 100%;
+  height: 100%;
   background: #DBDBDB !important;
   object-fit: cover;
 }

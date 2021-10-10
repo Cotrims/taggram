@@ -3,11 +3,13 @@
     <top-header :name="currentUser.username" :avatar="currentUser.avatar"></top-header>
     <div id="content">
         <post :post="post"></post>
-        <hr>
-        <p>Mais publicações</p>
-        <div class="related-posts">
-            <div id="related" v-for="(rel, i) of relateds" :key="i">
-                <related-post :post="rel"></related-post>
+        <div v-if="relateds.length > 0">
+            <hr>
+            <p>Mais publicações</p>
+            <div class="related-posts">
+                <div id="related" v-for="(rel, i) of relateds" :key="i">
+                    <related-post :image="rel.photo"></related-post>
+                </div>
             </div>
         </div>
     </div>
@@ -68,6 +70,7 @@ export default {
 
 <style scoped>
 #app {
+    height: 100%;
     background-color: #FAFAFA;
     font-family: Arial, Helvetica, sans-serif;
     -webkit-font-smoothing: antialiased;
