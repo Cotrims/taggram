@@ -16,7 +16,7 @@
             </div>
         </div>
         <div class="post_comments">
-            <post-comment v-for="(comment, i) of post.comments" :info="comment" :current_user="post.user.username" :key="i"> </post-comment>
+            <post-comment v-for="(comment, i) of post.comments" :info="comment" :current_user="post.user.username" :key="i" v-on:update="post.comments[i] = $event, $forceUpdate()"> </post-comment>
         </div>
         <div class="post_infos">
             <div class="post_comment_count">{{post.comments.length}} comentários</div>
@@ -34,9 +34,6 @@ export default {
     components: {
         "post-comment": Comment,
     },
-    data() {
-        return {}
-    }
 }
 </script>
 

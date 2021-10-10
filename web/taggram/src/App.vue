@@ -1,7 +1,7 @@
 <template>
-  <div id="app">
-      <top-header :name="currentUser.username" :avatar="currentUser.avatar"></top-header>
-      <div id="content">
+<div id="app">
+    <top-header :name="currentUser.username" :avatar="currentUser.avatar"></top-header>
+    <div id="content">
         <post :post="post"></post>
         <hr>
         <p>Mais publicações</p>
@@ -10,11 +10,11 @@
                 <related-post :post="rel"></related-post>
             </div>
         </div>
-      </div>
-      <footer>
+    </div>
+    <footer>
         <img src="./assets/tagview.svg" alt="">
-      </footer>
-  </div>
+    </footer>
+</div>
 </template>
 
 <script>
@@ -75,20 +75,20 @@ export default {
 }
 
 footer {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 4em;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 4em;
 }
 
 footer img {
-  width: 7em;
+    width: 7em;
 }
 
 #content {
-  max-width: 950px;
-  margin: 0 auto;
-  padding: 15px;
+    max-width: 950px;
+    margin: 0 auto;
+    padding: 15px;
 }
 
 .related-posts {
@@ -106,6 +106,28 @@ p {
 }
 
 hr {
-  margin-top: 60px;
+    margin-top: 60px;
+}
+
+@media only screen and (max-width: 750px) {
+    .related-posts {
+        grid-template-columns: 1fr 1fr !important;
+        grid-gap: 20px !important;
+    }
+
+    footer {
+        padding: 2em !important;
+    }
+}
+
+@media only screen and (max-width: 450px) {
+    .related-posts {
+        grid-template-columns: 1fr !important;
+        grid-gap: 10px !important;
+    }
+
+    footer {
+        padding: 1em !important;
+    }
 }
 </style>
